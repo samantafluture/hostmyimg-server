@@ -4,6 +4,10 @@ const multerConfig = require('./config/multer');
 
 const Post = require('./models/Post');
 
+app.get('/', (req, res) => {
+    res.json({ message: 'Welcome to HostMyImg API :D' });
+});
+
 routes.get('/posts', async (req, res) => {
     const posts = await Post.find();
 
