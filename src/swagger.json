@@ -1,0 +1,171 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "HostMyImg Web Server",
+        "description": "API for hosting imagens (.png, .jpg, .gif) online",
+        "version": "1.0.0",
+        "contact": {
+            "email": "samantafluture@gmail.com"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://hostmyimg-server.herokuapp.com"
+        }
+    ],
+    "tags": [
+        {
+            "name": "posts",
+            "description": "Operations based on posts"
+        }
+    ],
+    "paths": {
+        "/posts": {
+            "get": {
+                "tags": ["posts"],
+                "summary": "List all uploaded files",
+                "description": "Get all uploaded files",
+                "operationId": "getAllPosts",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Post"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error Server"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["posts"],
+                "summary": "Upload file",
+                "description": "Upload file or mutiple files at once. Accepted formats: .jpg, .gif or .png",
+                "operationId": "createPost",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/File"
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Ok",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "$ref": "#/components/schemas/Post"
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            "description": "Internal Error Server"
+                        }
+                    }
+                }
+            }
+        },
+        "/posts/{_id}": {
+            "get": {
+                "tags": ["posts"],
+                "summary": "List uploaded files by id",
+                "description": "Get all data from a file while passing its id by params",
+                "operationId": "getPostById",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "_id",
+                        "in": "path",
+                        "description": "Post id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Post"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error Server"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["posts"],
+                "summary": "Delete post by id",
+                "description": "Remove all data from a post while passing its ID by params",
+                "operationId": "deletePost",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "_id",
+                        "in": "path",
+                        "description": "Post id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    },
+                    "500": {
+                        "description": "Internal Error Server"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Post": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "size": {
+                        "type": "number"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "createAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "user": {
+                        "type": "string"
+                    },
+                    "_v": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "File": {
+                "type": "string",
+                "format": "base64"
+            }
+        }
+    }
+}
